@@ -1,4 +1,42 @@
-console.log(checkWinner(getPlayerChoice(), getComputerChoice()));
+playRound();
+
+function playRound(){
+    let round = 1;
+    let playerPoints = 0;
+    let computerPoints = 0;
+    while (round <= 5) {
+        round++;
+
+        if (playerPoints === 3) {
+            console.log(`The players wins 3 to ${computerPoints}`)
+            break;
+        }else if (computerPoints === 3) {
+            console.log(`The computer wins 3 to ${playerPoints}`)
+            break;
+        }
+
+        let playerChoice = getPlayerChoice();
+        let computerChoice = getComputerChoice();
+        
+        console.log(`ROUND ${round-1} The player picked ${playerChoice} and the computer picked ${computerChoice}`);
+
+        switch(checkWinner(playerChoice, computerChoice)){
+            case true:
+                console.log("The player wins! :)")
+                playerPoints++;
+                break;
+            case false:
+                console.log("The computer wins! :(")
+                computerPoints++;
+                break;
+            case "tie":
+                console.log("It's a tie!")
+                round--;
+                break;
+        }
+    }
+}
+
 
 function getPlayerChoice(){
     let playerChoice = prompt("Choose ROCK PAPER OR SCISSORS");
@@ -26,27 +64,28 @@ function getComputerChoice() {
 }
 
 function checkWinner(playerChoice, computerChoice) {
+    let playerWin;
     if (playerChoice === computerChoice) {
-        return "It's a tie!"
+        return "tie";
     }
     switch (playerChoice) {
         case "rock":
             if (computerChoice === "paper"){
-                return "Paper beats rock! The computer wins!";
+                return false;
             }else if (computerChoice === "scissors"){
-                return "Rock beats Scissors! The player wins!";
+                return true;
             }
         case "paper":
             if (computerChoice === "scissors"){
-                return "Scissors beats paper! The computer wins";
+                return false;
             }else if (computerChoice === "rock"){
-                return "Paper beats rock! The player wins";
+                return true;
             }
         case "scissors":
             if (computerChoice === "rock"){
-                return "Rock beats Scissors! The computer wins";
+                return false;
             }else if (computerChoice === "paper"){
-                return "Scissors beats paper! The computer wins";
+                return true;
             }
     }
 }
