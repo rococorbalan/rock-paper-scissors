@@ -1,64 +1,104 @@
-playRound();
 
-function playRound(){
-    let round = 1;
-    let playerPoints = 0;
-    let computerPoints = 0;
-    while (round <= 5) {
-        round++;
 
-        if (playerPoints === 3) {
-            console.log(`The players wins 3 to ${computerPoints}`)
-            break;
-        }else if (computerPoints === 3) {
-            console.log(`The computer wins 3 to ${playerPoints}`)
-            break;
-        }
+const displayPlayChoice = document.querySelector("#player");
+const displayCompChoice = document.querySelector("#computer");
 
-        let playerChoice = getPlayerChoice();
+const playerScore = document.querySelector("#player-score")
+const computerScore = document.querySelector("#computer-score")
+
+
+let playerPoints = 0;
+let computerPoints = 0;
+
+
+const buttons = document.querySelectorAll("button");
+let playerChoice;
+buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+        playerChoice = getPlayerChoice(button.id)
+        playRound();
+        const result = pointCheck(playerPoints, computerPoints);
+        playerPoints = result.playerPoints;
+        computerPoints = result.computerPoints;
+    })
+});
+
+#round div {
+    background-color: blue;
+}
+
+function playRound() {
+
         let computerChoice = getComputerChoice();
-        
-        console.log(`ROUND ${round-1} The player picked ${playerChoice} and the computer picked ${computerChoice}`);
 
-        switch(checkWinner(playerChoice, computerChoice)){
+        switch (checkWinner(playerChoice, computerChoice)) {
             case true:
                 console.log("The player wins! :)")
-                playerPoints++;
+                playerPoints = playerPoints + 1;
+                playerScore.textContent = "Player Score: " + playerPoints;
                 break;
             case false:
                 console.log("The computer wins! :(")
-                computerPoints++;
+                 computerPoints = computerPoints +1;
+                computerScore.textContent = "Computer Score: " + computerPoints;
                 break;
             case "tie":
                 console.log("It's a tie!")
-                round--;
                 break;
         }
+}
+
+function pointCheck(playerPoints, computerPoints){
+
+    if (playerPoints === 5) {
+        console.log(`The players wins!`)
+        playerPoints = 0;
+        computerPoints = 0;
+
+        playerScore.textContent = "Player Score: " + playerPoints;
+        computerScore.textContent = "Computer Score: " + computerPoints;
+    } else if (computerPoints === 5) {
+        console.log(`The computer wins!`)
+        playerPoints = 0;
+        computerPoints = 0;
+
+        playerScore.textContent = "Player Score: " + playerPoints;
+        computerScore.textContent = "Computer Score: " + computerPoints;
     }
+    return { playerPoints, computerPoints};
 }
 
 
-function getPlayerChoice(){
-    let playerChoice = prompt("Choose ROCK PAPER OR SCISSORS");
-    playerChoice = playerChoice.toLowerCase();
-    if (playerChoice == "rock" || playerChoice == "paper" || playerChoice == "scissors" ){
-        alert(`You picked ${playerChoice}`)
-        return playerChoice;
-    }else {
-        alert("what?")
-        getPlayerChoice();
+function getPlayerChoice(playerChoice){
+    switch(playerChoice) {
+        case "rock":
+            displayPlayChoice.textContent = "✊"
+            return "rock";
+        case "paper":
+            displayPlayChoice.textContent = "🖐️"
+            return "paper";
+        case "scissors":
+            displayPlayChoice.textContent = "✌️"
+            return "scissors";
     }
+    
 }
 
 function getComputerChoice() {
     let computerChoice = Math.floor(Math.random() * (Math.floor(3) - Math.ceil(1) + 1)) + Math.ceil(1);
     switch(computerChoice) {
         case 1:
-            return "rock";
+            computerChoice = "rock"
+            displayCompChoice.textContent = "✊"
+            return computerChoice;
         case 2:
-            return "paper";
+            computerChoice = "paper"
+            displayCompChoice.textContent = "🖐️"
+            return computerChoice;
         case 3:
-            return "scissors";
+            computerChoice = "scissors"
+            displayCompChoice.textContent = "✌️"
+            return computerChoice;
     }
 
 }
