@@ -3,15 +3,22 @@
 const displayPlayChoice = document.querySelector("#player");
 const displayCompChoice = document.querySelector("#computer");
 
+const playerSection = document.querySelector("#player-sec")
+const computerSection = document.querySelector("#computer-sec")
+
+
 const playerScore = document.querySelector("#player-score")
 const computerScore = document.querySelector("#computer-score")
+const roundResult = document.querySelector("#result")
 
+const gameOver = document.querySelector("#game-over")
+const choice = document.querySelector("#choice")
 
 let playerPoints = 0;
 let computerPoints = 0;
 
-
 const buttons = document.querySelectorAll("button");
+
 let playerChoice;
 buttons.forEach((button) => {
     button.addEventListener("click", () => {
@@ -23,9 +30,7 @@ buttons.forEach((button) => {
     })
 });
 
-#round div {
-    background-color: blue;
-}
+
 
 function playRound() {
 
@@ -33,17 +38,17 @@ function playRound() {
 
         switch (checkWinner(playerChoice, computerChoice)) {
             case true:
-                console.log("The player wins! :)")
+                roundResult.textContent = "Player wins! 👈"
                 playerPoints = playerPoints + 1;
                 playerScore.textContent = "Player Score: " + playerPoints;
                 break;
             case false:
-                console.log("The computer wins! :(")
-                 computerPoints = computerPoints +1;
+                roundResult.textContent = "Computer wins! 👉"
+                computerPoints = computerPoints +1;
                 computerScore.textContent = "Computer Score: " + computerPoints;
                 break;
             case "tie":
-                console.log("It's a tie!")
+                roundResult.textContent = "Tie! 🤝"
                 break;
         }
 }
@@ -51,14 +56,18 @@ function playRound() {
 function pointCheck(playerPoints, computerPoints){
 
     if (playerPoints === 5) {
-        console.log(`The players wins!`)
+
+        endScreen("player");
+
         playerPoints = 0;
         computerPoints = 0;
 
         playerScore.textContent = "Player Score: " + playerPoints;
         computerScore.textContent = "Computer Score: " + computerPoints;
     } else if (computerPoints === 5) {
-        console.log(`The computer wins!`)
+
+        endScreen("computer");
+
         playerPoints = 0;
         computerPoints = 0;
 
@@ -128,4 +137,49 @@ function checkWinner(playerChoice, computerChoice) {
                 return true;
             }
     }
+}
+
+function endScreen(winner) {
+
+    let playAgain = document.createElement("button");
+    playAgain.textContent = "Play again!"
+    playAgain.style.cssText = "font-size: 32px;width: 300px;height: 100px";
+    playAgain.addEventListener("click", () => {
+        playAgain.remove();
+        restartGame();
+    });
+
+    hideElements();
+    gameOver.style.cssText = 'display: flex; text-align: center';
+    
+    if (winner === "player"){
+        gameOver.textContent = "You Win! 🙌" 
+    }
+    else if (winner === "computer"){
+        gameOver.textContent = "The computer Wins! 👎"
+    }
+    choice.appendChild(playAgain);
+}
+
+function hideElements() {
+    playerSection.style.display = 'none';
+    computerSection.style.display = 'none';
+    roundResult.style.display = 'none';
+
+    buttons.forEach((button) => {
+        button.style.display = 'none';
+    });
+}
+
+
+function restartGame() {
+    playerSection.style.display = 'flex';
+    computerSection.style.display = 'flex';
+    roundResult.style.display = 'flex'
+
+    buttons.forEach((button) => {
+        button.style.display = 'flex';
+    });
+
+    gameOver.style.display = 'none';
 }
